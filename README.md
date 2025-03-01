@@ -2,7 +2,12 @@
 ver 1.0 alpha
 
 **STEP ONE:**
-documentstion: http://185.97.200.31:1024/
+Write code following this documentstion: http://185.97.200.31:1024/
+For example:
+>int main(){
+>  printf("I hate you.");
+>
+>}
 
 **STEP TWO:**
 launch Americano compiler. That's really easy...
