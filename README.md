@@ -1,7 +1,7 @@
 # Americano programming language.
 ver 1.0 alpha\
 description:\
-It's simplest programing languege wichoriginaly was designed to describe game logic but can be used as general purpose language.\   
+It's simplest programing languege wichoriginaly was designed to describe game logic but can be used as general purpose language.   
 \
 **STEP ONE:**
 Write code following this documentstion: http://185.97.200.31:1024/
