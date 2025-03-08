@@ -12,7 +12,8 @@ For example:
 
 **STEP TWO:**
 launch Americano compiler. It's easy, just type command: 
->  ./Americano [filename] -[architecture]
+./Americano [filename] -[architecture]
+
 for e.g: 
 ![screenshot](screen-shot-1.png)
 
