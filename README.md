@@ -1,6 +1,8 @@
 # Americano programming language.
-ver 1.0 alpha
-
+ver 1.0 alpha\
+description:\
+It's simplest programing languege wichoriginaly was designed to describe game logic but can be used as general purpose language.\   
+\
 **STEP ONE:**
 Write code following this documentstion: http://185.97.200.31:1024/
 For example:
@@ -16,4 +18,4 @@ launch Americano compiler. It's easy, just type command:\
 ![screenshot](screen-shot-1.png)
 
 **STEP THREE:**
-write ./app in your console or double click on app icon.
+write ./[filename] in console or double click on app icon to launch application.
