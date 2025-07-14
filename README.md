@@ -6,12 +6,11 @@ It's simplest programing languege wich originaly was designed to describe game l
 **STEP ONE:**
 Write code following this documentation in docs folder.
 For example:
->[name]
->program
->[raw]
+>[name]\
+>program\
+>[raw]\
 >int main(){\
->    printf("I hate my life.");
->
+>    printf("I hate my life.");\
 >}
 
 **STEP TWO:**
