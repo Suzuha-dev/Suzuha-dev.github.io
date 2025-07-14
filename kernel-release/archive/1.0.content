@@ -1,0 +1,24 @@
+[name]
+kernel
+[raw]
+int kernel(){
+        // Hello, world. I am first kernel written in Americano lang.
+        init:
+                char sys_bus0_status = 'F';
+                char sys_bus1_status = 'F';
+                char sys_bus2_status = 'F';
+
+                int64 sys_bus0; // opcode bus
+                int64 sys_bus1; // data bus
+                int64 sys_bus2; // message bus
+
+        main_cycle:
+
+
+
+
+
+        nequ(sys_bus0, 0x00){
+                goto main_cycle;
+        }
+}
