@@ -1,3 +1,3 @@
 ***Americano programming language.*** \
-**______________________________________**
-
+**______________________________________** \
+fast, argile, secure.. lightweight c like language.
