@@ -4,7 +4,7 @@ description:\
 It's simplest programing languege wich originaly was designed to describe game logic but can be used as general purpose language.   
 \
 **STEP ONE:**
-Write code following this documentstion: http://185.97.200.31:1024/
+Write code following this documentation in docs folder.
 For example:
 >int main(){\
 >    printf("I hate my life.");
