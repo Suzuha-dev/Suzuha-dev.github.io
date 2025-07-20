@@ -4,17 +4,36 @@ kernel
 int kernel(){
 	// Hello, world. I am first kernel written in Americano lang.
 	init:	
-		char sys_bus0_status = 'F';
-		char sys_bus1_status = 'F';
-		char sys_bus2_status = 'F';	
+		char sys_bus0_status = 'I';
+		char sys_bus1_status = 'I';
+		char sys_bus2_status = 'I';	
 
 		int64 sys_bus0; // opcode bus 
 		int64 sys_bus1; // data bus
 		int64 sys_bus2; // message bus
-
+		
+		char arch; // Will be auto assigned by compiler. 
+	
 	life_cycle:		
 	
-	
+	// Interrupt handling.. 
+	equ(arch, 0x41) { // Arm based machines
+		
+	}
+		
+	equ(arch, 0x49) { // Intel based machines
+		equ((sys_bus0 *+1), 0xcd) { //checking intrrupt byte
+			
+		} 
+	}		
+		
+	equ(arch, 0x50) { // Power pc machines
+		
+	}
+			
+	equ(arch, 0x43) { // CISC (pdp-11) machines 	
+		
+	}	
 
 	
 	nequ(sys_bus0, 0x00){
