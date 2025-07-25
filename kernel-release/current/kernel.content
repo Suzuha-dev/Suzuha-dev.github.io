@@ -1,49 +1,231 @@
-[name]                                                    
-kernel                                                    
-[raw]                                                     
-int kernel(){                                             
-        // Hello, world. I am first kernel written in Amer
-icano lang.                                               
-        init:                                             
-                system.set.if.on;                         
-                char sys_bus0_status = 'I';               
-                char sys_bus1_status = 'I';               
-                char sys_bus2_status = 'I';               
-                                                          
-                int64 sys_bus0 = 0xc3c3c3; // opcode bus             
-                int64 sys_bus1; // data bus    
-                int64 sys_bus2; // message bus            
-                                                          
-                char arch; // Will be auto assigned by com
-piler.                                                    
-                mem *memory 512; // reserve memory to something that matters.. :)                          
-                                                          
-        life_cycle:                                       
-        // disabling interrupts..                         
-        system.set.if.off;                                
-                                                          
-        // Interrupt handling..                           
-        equ(arch, 0x41) { // Arm based machines           
-                                                          
-        }                                                 
-                                                          
-        equ(arch, 0x49) { // Intel based machines         
-                equ((sys_bus0 *+1), 0xcd) { //checking int
-rrupt byte                                                
-                        system.set.if.on; // system set in
-terrupt flag on                                           
-                }                                         
-        }                                                 
-                                                          
-        equ(arch, 0x50) { // Power pc machines            
-                                                          
-        }                                                 
-                                                          
-        equ(arch, 0x43) { // CISC (pdp-11) machines       
-                                                          
-        }                                                 
-                                                          
-        nequ(sys_bus0, 0x00){                             
-                goto life_cycle;                          
-        }                                                 
+[name]
+kernel
+[raw]
+int kernel(){
+	// Hello, world. I am first kernel written in Americano lang.
+	init:	
+		system.set.if.on;
+		char sys_bus0_status = 'I';
+		char sys_bus1_status = 'I';
+		char sys_bus2_status = 'I';	
+	
+		int16 return_code; // will put here return from call sys_bus0 opcodes.. 
+		int64 sys_bus0 = 0xcd80; // opcode bus 
+		int64 sys_bus1; // data bus
+		int64 sys_bus2; // message bus
+
+		mem *alocated_memory_table 768;
+		// Allocated memory table structure
+		// |    8 bytes    |   8 bytes   | 16 bytes  |
+		// | start address | end address |    size   |
+		// | 24 rows in table ...  768 bytes summary |
+
+                mem *apps_base_memory_table 24576;
+                // Allocated memory table structure
+                // |      8 bytes      |  16 bytes  |
+                // |   start address   |     size   |		                // | 1024 apps  24576 bytes summary |
+
+		char arch; // Will be auto assigned by compiler. 	
+		mem *TTY 9600;
+                mem *video_buffer 480000;
+
+	life_cycle:
+		// disabling interrupts..	
+		system.if = off;
+	
+		// Interrupt handling.. 
+		equ(arch, 0x41) { // Arm64 based machines
+			equ((sys_bus0 *), 0xd4) {
+				system.if = off;
+				goto syscall_handler;
+			}
+		}	
+
+		equ(arch, 0x61) { // Arm32 based machines
+	                equ((sys_bus0 *), 0xef) { 
+	                        system.if = off;
+       	        	        goto syscall_handler;
+        	        }
+	        }
+
+		equ(arch, 0x49) { // Intel based machines
+			equ((sys_bus0 *), 0xcd) {
+				system.if = on;	
+				equ((sys_bus0 *+1), 0x80) {
+					system.if = off;
+					goto syscall_handler;
+				}	
+			} 
+		}
+		
+		equ(arch, 0x69) { // Intel 32 based machines
+                        equ((sys_bus0 *), 0xcd) {
+                                system.if = on;
+                                equ((sys_bus0 *+1), 0x80) {
+                                        system.if = off;
+                                        goto syscall_handler;
+                                }
+                        }
+                }
+		
+		equ(arch, 0x50) { // Power pc machines
+ 			equ((sys_bus0 *), 0x44) { 
+				equ((sys_bus0 *+3), 0x02){
+                                	goto syscall_handler;
+				}
+                	}
+		}
+			
+		equ(arch, 0x43) { // CISC (pdp-11) machines	
+			equ((sys_bus0 *), 0x22) {
+				goto syscall_handler;      
+                   	}
+		}
+	
+
+		call sys_bus0*;
+
+		nequ(sys_bus0, 0x00){
+			goto life_cycle;
+		}
+
+
+	syscall_handler:
+		//open, close, read, write (for begining...) 
+		equ(arch, 0x41) { // aarch64
+	             	equ((%x0), 0x00) { // open 
+				equ((%w1), 0x00) { // file 
+					uefi.open_root();
+					uefi.open_file();
+				}
+				equ((%w1), 0x01) { // text i/o  
+
+                                } 
+				equ((%w1), 0x02) { // device 
+
+                                }	
+                        }
+                        equ((%x0), 0x01) { // close
+				equ((%w1), 0x00) { 
+
+                                }
+                                equ((%w1), 0x01) {
+
+                                }
+                                equ((%w1), 0x02) {
+
+                                }
+                        }
+                        equ((%x0), 0x02) { // read
+				equ((%w1), 0x00) {
+
+                                }
+                                equ((%w1), 0x01) {
+
+                                }
+                                equ((%w1), 0x02) {
+
+                                }
+                        }
+                        equ((%x0), 0x03) { // write
+				equ((%w1), 0x00) { 
+
+                                }
+                                equ((%w1), 0x01) {
+
+                                }
+                                equ((%w1), 0x02) {  
+
+                                }
+                        }
+		}
+		equ(arch, 0x61) { // aarch32
+			equ((%w0), 0x00) {	
+                                equ((%w1), 0x00) {
+
+                                }
+                                equ((%w1), 0x01) {
+
+                                }
+                                equ((%w1), 0x02) {
+
+                                }
+                        }
+                        equ((%w0), 0x01) {
+                                equ((%w1), 0x00) {
+
+                                }
+                                equ((%w1), 0x01) { 
+
+                                }
+                                equ((%w1), 0x02) { 
+
+                                }
+                        }
+                        equ((%w0), 0x02) {
+                                equ((%w1), 0x00) {
+
+                                }
+                                equ((%w1), 0x01) {
+
+                                }
+                                equ((%w1), 0x02) {
+
+                                }
+                        }
+                        equ((%w0), 0x03) {
+                                equ((%w1), 0x00) {
+
+                                }
+                                equ((%w1), 0x01) {
+
+                                }
+                                equ((%w1), 0x02) { 
+
+                                }
+                        }
+		}
+		
+		equ(arch, 0x49) { // intel
+			equ((%rax), 0x00) {
+				
+			}
+                        equ((%rax), 0x01) {
+				
+                        }
+                        equ((%rax), 0x02) {
+				
+                        }
+                        equ((%rax), 0x03) {
+				
+                        }
+		}
+		equ(arch, 0x69) { // intel32
+			equ((%eax), 0x00 ) {
+                        	
+			}
+                        equ((%eax), 0x01) {
+				
+                        }
+                        equ((%eax), 0x02) {
+
+                        }
+                        equ((%eax), 0x03) {
+
+                        }
+                }
+
+		equ(arch, 0x50) { // power pc 
+                
+		}
+
+                equ(arch, 0x43) { // pdp-11
+
+                }
+
+		goto life_cycle;
+
+		fs.fat: 
+
+
 }
